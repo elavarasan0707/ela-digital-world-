@@ -1,0 +1,6 @@
+{
+  "name": "ELA Digital World",
+  "description": "World-class, futuristic, full-stack digital marketing, web development, branding and AI solutions agency.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ELA Digital World Firebase Schema Blueprint",
+  "description": "Enterprise cloud database blueprint for ELA Digital World agency portal including CRM leads, projects, services, blogs, testimonials, and user profiles.",
+  "entities": {
+    "leads": {
+      "title": "CRM Leads & Inquiries",
+      "description": "Prospective client consultation bookings, project briefs, and audit inquiries",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique lead identifier", "validation": "non-empty" },
+        "clientName": { "type": "string", "description": "Prospective client full name", "validation": "non-empty, max 100 chars" },
+        "email": { "type": "string", "description": "Work email address", "validation": "valid email format" },
+        "phone": { "type": "string", "description": "WhatsApp or phone number", "validation": "non-empty" },
+        "company": { "type": "string", "description": "Business or organisation name", "validation": "optional string" },
+        "serviceRequired": { "type": "string", "description": "Selected agency service tier", "validation": "non-empty" },
+        "budget": { "type": "string", "description": "Budget scope tier", "validation": "optional string" },
+        "message": { "type": "string", "description": "Project requirements or description", "validation": "optional string, max 2000 chars" },
+        "status": { "type": "string", "description": "Lead lifecycle status", "validation": "one of: new, contacted, proposal_sent, closed, archived" },
+        "createdAt": { "type": "string", "description": "Creation ISO timestamp", "validation": "ISO 8601 string" },
+        "notes": { "type": "string", "description": "Internal executive notes", "validation": "optional string" }
+      },
+      "required": ["clientName", "email", "serviceRequired", "status", "createdAt"],
+      "security": {
+        "read": "admin_only",
+        "write": "public_create_admin_manage"
+      }
+    },
+    "projects": {
+      "title": "Showcase Projects & Case Studies",
+      "description": "Portfolio work items across web engineering, AI, marketing, and branding",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique project identifier", "validation": "non-empty" },
+        "title": { "type": "string", "description": "Project display title", "validation": "non-empty, max 120 chars" },
+        "client": { "type": "string", "description": "Client or brand name", "validation": "non-empty" },
+        "category": { "type": "string", "description": "Project category domain", "validation": "one of: Websites, Marketing, Branding, AI, Automation, Paid Acquisition, Search & SEO" },
+        "image": { "type": "string", "description": "Cover hero image URL", "validation": "valid URL" },
+        "description": { "type": "string", "description": "Summary of business outcome and delivered tech", "validation": "non-empty" },
+        "tags": { "type": "array", "description": "Technology or capability keywords", "validation": "array of strings" },
+        "link": { "type": "string", "description": "Live production or demo link", "validation": "optional URL" },
+        "metrics": { "type": "string", "description": "Key quantifiable business metric", "validation": "optional string" },
+        "isFeatured": { "type": "boolean", "description": "Featured status on homepage", "validation": "boolean" },
+        "createdAt": { "type": "string", "description": "Creation timestamp", "validation": "ISO 8601 string" }
+      },
+      "required": ["title", "client", "category", "image", "description"],
+      "security": {
+        "read": "public",
+        "write": "admin_only"
+      }
+    },
+    "services": {
+      "title": "Agency Services & Deliverables",
+      "description": "Catalog of agency capabilities and pricing models",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Service identifier", "validation": "non-empty" },
+        "title": { "type": "string", "description": "Service name", "validation": "non-empty" },
+        "category": { "type": "string", "description": "Service category domain", "validation": "non-empty" },
+        "description": { "type": "string", "description": "Full value proposition overview", "validation": "non-empty" },
+        "icon": { "type": "string", "description": "Lucide icon identifier name", "validation": "non-empty" },
+        "deliverables": { "type": "array", "description": "Core deliverables included in engagement", "validation": "array of strings" },
+        "priceRange": { "type": "string", "description": "Engagement pricing tier", "validation": "non-empty" },
+        "isPopular": { "type": "boolean", "description": "Flag for highlighted high-demand offering", "validation": "boolean" },
+        "createdAt": { "type": "string", "description": "Creation timestamp", "validation": "ISO 8601 string" }
+      },
+      "required": ["title", "category", "description", "deliverables", "priceRange"],
+      "security": {
+        "read": "public",
+        "write": "admin_only"
+      }
+    },
+    "blogs": {
+      "title": "Insights & Thought Leadership Articles",
+      "description": "Strategic playbooks, tech guides, and growth methodologies",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Article slug or unique ID", "validation": "non-empty" },
+        "title": { "type": "string", "description": "Article headline", "validation": "non-empty, max 150 chars" },
+        "excerpt": { "type": "string", "description": "Short abstract", "validation": "non-empty" },
+        "content": { "type": "string", "description": "Full markdown/HTML article body", "validation": "non-empty" },
+        "category": { "type": "string", "description": "Topic category", "validation": "non-empty" },
+        "author": { "type": "string", "description": "Author name & title", "validation": "non-empty" },
+        "readTime": { "type": "string", "description": "Estimated reading duration", "validation": "non-empty" },
+        "date": { "type": "string", "description": "Publication date string", "validation": "non-empty" },
+        "image": { "type": "string", "description": "Cover graphic URL", "validation": "valid URL" },
+        "tags": { "type": "array", "description": "Article tags", "validation": "array of strings" }
+      },
+      "required": ["title", "excerpt", "content", "category", "author", "date"],
+      "security": {
+        "read": "public",
+        "write": "admin_only"
+      }
+    },
+    "testimonials": {
+      "title": "Client Reviews & Endorsements",
+      "description": "Social proof and verified partner feedback",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Review identifier", "validation": "non-empty" },
+        "clientName": { "type": "string", "description": "Client executive name", "validation": "non-empty" },
+        "company": { "type": "string", "description": "Client company name", "validation": "non-empty" },
+        "role": { "type": "string", "description": "Title/Designation", "validation": "non-empty" },
+        "review": { "type": "string", "description": "Testimonial quotation", "validation": "non-empty" },
+        "rating": { "type": "number", "description": "Star rating out of 5", "validation": "between 1 and 5" },
+        "avatar": { "type": "string", "description": "Avatar photograph URL", "validation": "valid URL" },
+        "isFeatured": { "type": "boolean", "description": "Featured testimonial flag", "validation": "boolean" },
+        "createdAt": { "type": "string", "description": "Submission timestamp", "validation": "ISO 8601 string" }
+      },
+      "required": ["clientName", "company", "review", "rating"],
+      "security": {
+        "read": "public",
+        "write": "admin_only"
+      }
+    },
+    "users": {
+      "title": "User Accounts & Profiles",
+      "description": "Platform user profiles and role allocations",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID or unique ID", "validation": "non-empty" },
+        "name": { "type": "string", "description": "Full display name", "validation": "non-empty" },
+        "email": { "type": "string", "description": "Account email address", "validation": "valid email format" },
+        "company": { "type": "string", "description": "Company name", "validation": "optional string" },
+        "role": { "type": "string", "description": "User permission role", "validation": "one of: admin, client" },
+        "photoURL": { "type": "string", "description": "Avatar image URL", "validation": "optional URL" },
+        "createdAt": { "type": "string", "description": "Account creation timestamp", "validation": "ISO 8601 string" },
+        "lastLogin": { "type": "string", "description": "Latest login timestamp", "validation": "ISO 8601 string" }
+      },
+      "required": ["uid", "name", "email", "role"],
+      "security": {
+        "read": "authenticated",
+        "write": "owner_or_admin"
+      }
+    }
+  }
+}
