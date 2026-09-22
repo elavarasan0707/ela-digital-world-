@@ -35,18 +35,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const LOCAL_USER_KEY = 'ela_auth_user_v1';
 
-export const checkIsAdmin = (email?: string | null): boolean => {
-  if (!email) return false;
-  const clean = email.toLowerCase().trim();
-  return (
-    clean === 'kasthuricse23@sasurie.com' ||
-    clean === 'elae2379@gmail.com' ||
-    clean.includes('admin') ||
-    clean.startsWith('director@') ||
-    clean.startsWith('founder@')
-  );
-};
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(() => {
     try {
@@ -65,7 +53,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
         setFirebaseUser(fbUser);
         if (fbUser) {
-          const isAdmin = checkIsAdmin(fbUser.email);
+          const isAdmin = fbUser.email?.toLowerCase().includes('admin') || fbUser.email === 'kasthuricse23@sasurie.com';
           const userProfile: UserProfile = {
             uid: fbUser.uid,
             name: fbUser.displayName || fbUser.email?.split('@')[0] || 'User',
@@ -123,7 +111,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // If a custom Google account was selected or entered by the user
     const targetEmail = (customAccount?.email || 'kasthuricse23@sasurie.com').trim().toLowerCase();
     const targetName = customAccount?.name || (targetEmail === 'kasthuricse23@sasurie.com' ? 'Er. Kasthuri (Founder & Architect)' : targetEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
-    const isAdmin = checkIsAdmin(targetEmail);
+    const isAdmin = targetEmail === 'kasthuricse23@sasurie.com' || targetEmail.includes('admin');
 
     const googleUser: UserProfile = {
       uid: 'google-acc-' + Date.now(),
@@ -147,7 +135,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         );
         const res: any = await Promise.race([popupPromise, timeoutPromise]);
         if (res?.user) {
-          const fbAdmin = checkIsAdmin(res.user.email || targetEmail);
+          const fbAdmin = res.user.email?.toLowerCase().includes('admin') || res.user.email === 'kasthuricse23@sasurie.com';
           const resolvedUser: UserProfile = {
             uid: res.user.uid,
             name: res.user.displayName || res.user.email?.split('@')[0] || 'Google User',
@@ -177,7 +165,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loginWithEmail = async (email: string, pass: string) => {
     setLoading(true);
     const cleanEmail = email.trim().toLowerCase();
-    const isAdmin = checkIsAdmin(cleanEmail);
+    const isAdmin = cleanEmail.includes('admin') || cleanEmail === 'kasthuricse23@sasurie.com';
 
     if (isFirebaseConfigured && auth) {
       try {
@@ -229,7 +217,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signupWithEmail = async (name: string, email: string, pass: string) => {
     setLoading(true);
     const cleanEmail = email.trim().toLowerCase();
-    const isAdmin = checkIsAdmin(cleanEmail);
+    const isAdmin = cleanEmail.includes('admin') || cleanEmail === 'kasthuricse23@sasurie.com';
 
     if (isFirebaseConfigured && auth) {
       try {
@@ -308,7 +296,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const confirmPasswordReset = async (email: string, newPass: string) => {
     setLoading(true);
     const cleanEmail = email.trim().toLowerCase();
-    const isAdmin = checkIsAdmin(cleanEmail);
+    const isAdmin = cleanEmail.includes('admin') || cleanEmail === 'kasthuricse23@sasurie.com';
     await new Promise(res => setTimeout(res, 500));
     
     // Save updated session state locally

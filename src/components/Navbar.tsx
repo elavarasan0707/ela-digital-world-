@@ -5,7 +5,6 @@ import {
   X, 
   User as UserIcon, 
   ShieldAlert, 
-  ShieldCheck,
   LogOut, 
   Sparkles, 
   ChevronRight,
@@ -14,7 +13,6 @@ import {
   LayoutDashboard
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { EnterpriseSecurityModal } from './EnterpriseSecurityModal';
 
 interface NavbarProps {
   currentRoute: string;
@@ -27,7 +25,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState<boolean>(false);
-  const [securityModalOpen, setSecurityModalOpen] = useState<boolean>(false);
   const { user, logout, isFirebaseLive } = useAuth();
 
   useEffect(() => {
@@ -142,18 +139,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
               <PhoneCall className="w-3.5 h-3.5 text-emerald-400" />
               <span className="font-mono text-[11px]">+91 8667618925</span>
             </a>
-
-            {/* Full Security Protocol Modal trigger */}
-            <button
-              id="top-security-btn"
-              onClick={() => setSecurityModalOpen(true)}
-              className="px-2.5 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
-              title="View Enterprise Security & Compliance Protocols"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="hidden xl:inline font-mono text-[11px]">Full Security</span>
-              <span className="inline xl:hidden font-mono text-[11px]">Security</span>
-            </button>
 
             {/* Direct Top Dashboard Button */}
             <button
@@ -357,24 +342,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
                   </div>
                 </div>
               )}
-              {/* Security trigger for mobile */}
-              <button
-                onClick={() => { setMobileMenuOpen(false); setSecurityModalOpen(true); }}
-                className="w-full py-2 px-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer mt-2"
-              >
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Enterprise Security & Compliance Status</span>
-              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Enterprise Security Modal */}
-      <EnterpriseSecurityModal
-        isOpen={securityModalOpen}
-        onClose={() => setSecurityModalOpen(false)}
-      />
     </header>
   );
 };
